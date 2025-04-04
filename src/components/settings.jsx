@@ -44,6 +44,7 @@ const Settings = () => {
 
   return (
     <>
+      <h2>Settings</h2>
       <CategorySelect categories={categories} />
       {!categoryIsAny &&
         <>
