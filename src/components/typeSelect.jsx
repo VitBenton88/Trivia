@@ -13,7 +13,7 @@ const TypeSelect = () => {
       <label htmlFor="type">Type</label>
       <br />
       <select name="type" value={type} onChange={handleChange}>
-        <option value="any">Any Difficulty</option>
+        <option value="any">Any Type</option>
         <option value="multiple">Multiple Choice</option>
         <option value="boolean">True / False</option>
       </select>
