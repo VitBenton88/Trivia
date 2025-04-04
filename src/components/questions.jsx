@@ -1,18 +1,14 @@
 import { useContext } from 'react';
+import { decodeHtml } from '../util'
+import Loader from './loader'
 import TriviaContext from '../context/TriviaContext';
 
 const Questions = () => {
   // Context
-  const { questions } = useContext(TriviaContext);
+  const { questions, isQuestionsLoading } = useContext(TriviaContext);
 
-  // Methods
-  const decodeHtml = (html) => {
-    const txt = document.createElement('textarea')
-    txt.innerHTML = html
-    return txt.value
-  }
-
-  if (!questions.length) return <></>;
+  if (isQuestionsLoading) return <Loader />;
+  if (!questions.length) return;
 
   return (
     <>
