@@ -1,5 +1,6 @@
 
 import { useContext, useState, useEffect, useMemo, useCallback } from 'react';
+import { fetchCategories } from '../api';
 import Loader from './loader'
 import CategorySelect from './categorySelect'
 import DifficultySelect from './difficultySelect'
@@ -24,12 +25,11 @@ const Settings = () => {
 
   // Effects Hooks
   useEffect(() => {
-    const fetchCategories = async () => {
+    const getCategories = async () => {
       await new Promise(resolve => setTimeout(resolve, 1000));
       try {
-        const response = await fetch('https://opentdb.com/api_category.php');
-        const data = await response.json();
-        setCategories([...categories, ...data.trivia_categories]);
+        const { trivia_categories } = await fetchCategories();
+        setCategories([...categories, ...trivia_categories]);
       } catch (error) {
         console.error(error.message);
       } finally {
@@ -37,7 +37,7 @@ const Settings = () => {
       }
     };
 
-    fetchCategories();
+    getCategories();
   }, []);
 
   if (isTokenLoading || isCategoryLoading) return <Loader />;

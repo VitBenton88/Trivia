@@ -4,6 +4,7 @@ const API_ENDPOINTS = {
   getQuestions: 'https://opentdb.com/api.php',
   getGlobalCategoryMaximums: 'https://opentdb.com/api_count_global.php',
   getCategoryMaximums: 'https://opentdb.com/api_count.php',
+  getCategories: 'https://opentdb.com/api_category.php',
 };
 
 export const resetToken = async (token = '') => {
@@ -78,4 +79,9 @@ export const fetchToken = async () => {
   } else {
     throw new Error('Failed to fetch session token.');
   }
+};
+
+export const fetchCategories = async () => {
+  const response = await fetch(API_ENDPOINTS.getCategories);
+  return await response.json();
 };
