@@ -8,7 +8,7 @@ const Questions = () => {
   const { questions, isQuestionsLoading } = useContext(TriviaContext);
 
   if (isQuestionsLoading) return <Loader />;
-  if (!questions.length) return;
+  if (!questions?.length) return;
 
   return (
     <>

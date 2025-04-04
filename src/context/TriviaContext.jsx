@@ -1,4 +1,5 @@
 import { createContext, useReducer, useEffect, useState, useCallback } from 'react';
+import { fetchCategoryMax, fetchQuestions, fetchToken, resetToken } from '../api';
 
 // Initial state
 const initialState = { questionLimit: 10, maximums: [], category: 'any', difficulty: 'any', type: 'any', token: '', questions: [], };
@@ -37,21 +38,10 @@ export const TriviaProvider = ({ children }) => {
   const [isQuestionsLoading, setIsQuestionsLoading] = useState(false);
 
   // Methods
-  const resetToken = useCallback(async () => {
-    setIsTokenLoading(true);
-
+  const clearToken = useCallback(() => {
     try {
-      const { token } = state;
-      const fetchEndpoint = `https://opentdb.com/api_token.php?command=reset&token=${token}`;
-      const response = await fetch(fetchEndpoint);
-      const data = await response.json();
-
-      if (data.response_code === 0) {
-        sessionStorage.setItem('triviaToken', data.token);
-        dispatch({ type: 'SET_TOKEN', payload: data.token });
-      } else {
-        console.error('Failed to reset session token.');
-      }
+      setIsTokenLoading(true);
+      resetToken(state.token);
     } catch (error) {
       console.error(error.message);
     } finally {
@@ -63,27 +53,16 @@ export const TriviaProvider = ({ children }) => {
     setIsQuestionsLoading(true);
 
     try {
-      const { category, difficulty, type, questionLimit: amount, token } = state;
-      const params = { category, difficulty, type, amount, token };
-
-      const fetchEndpoint = new URL('https://opentdb.com/api.php');
-
-      Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null & value !== 'any') {
-          fetchEndpoint.searchParams.append(key, value);
-        }
-      });
-
-      const response = await fetch(fetchEndpoint.toString());
-      const data = await response.json();
+      const { response_code, results } = await fetchQuestions(state);
       const tokenErrorCodes = [3, 4];
 
-      if (tokenErrorCodes.includes(data.response_code)) {
-        resetToken();
+      if (tokenErrorCodes.includes(response_code)) {
+        clearToken();
         generateQuestions();
       } else {
-        dispatch({ type: 'SET_QUESTIONS', payload: data.results });
+        dispatch({ type: 'SET_QUESTIONS', payload: results });
       }
+
     } catch (error) {
       console.error(error.message);
     } finally {
@@ -93,65 +72,23 @@ export const TriviaProvider = ({ children }) => {
 
   // Effects Hooks
   useEffect(() => {
-    const fetchCategoryMax = async () => {
-      const isAnyCategory = state.category === 'any';
-
+    const getMaximums = async () => {
       try {
-        const fetchEndpoint = isAnyCategory ?
-          'https://opentdb.com/api_count_global.php' :
-          `https://opentdb.com/api_count.php?category=${state.category}`;
-        const response = await fetch(fetchEndpoint);
-        const data = await response.json();
-
-        const payload = isAnyCategory ? [
-          { difficulty: 'any', max: data.overall.total_num_of_verified_questions }
-        ] : [
-          {
-            difficulty: 'any',
-            max: data.category_question_count.total_question_count,
-          },
-          {
-            difficulty: 'easy',
-            max: data.category_question_count.total_easy_question_count,
-          },
-          {
-            difficulty: 'medium',
-            max: data.category_question_count.total_medium_question_count,
-          },
-          {
-            difficulty: 'hard',
-            max: data.category_question_count.total_hard_question_count,
-          },
-        ];
-
-        dispatch({ type: 'SET_MAXIMUMS', payload });
+        const maximums = await fetchCategoryMax(state.category);
+        dispatch({ type: 'SET_MAXIMUMS', payload: maximums });
       } catch (error) {
         console.error(error.message);
       }
     };
 
-    fetchCategoryMax();
+    getMaximums();
   }, [state.category]);
 
   useEffect(() => {
-    const fetchToken = async () => {
+    const getToken = async () => {
       try {
-        const tokenFromSession = sessionStorage.getItem('triviaToken');
-
-        if (tokenFromSession) {
-          dispatch({ type: 'SET_TOKEN', payload: tokenFromSession });
-        } else {
-          const fetchEndpoint = 'https://opentdb.com/api_token.php?command=request';
-          const response = await fetch(fetchEndpoint);
-          const data = await response.json();
-
-          if (data.response_code === 0) {
-            sessionStorage.setItem('triviaToken', data.token);
-            dispatch({ type: 'SET_TOKEN', payload: data.token });
-          } else {
-            console.error('Failed to fetch session token.');
-          }
-        }
+        const token = await fetchToken();
+        dispatch({ type: 'SET_TOKEN', payload: token });
       } catch (error) {
         console.error(error.message);
       } finally {
@@ -159,7 +96,7 @@ export const TriviaProvider = ({ children }) => {
       }
     };
 
-    fetchToken();
+    getToken();
   }, []);
 
   return (
