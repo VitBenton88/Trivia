@@ -1,30 +1,9 @@
 import { createContext, useReducer, useEffect, useState, useCallback } from 'react';
 import { fetchCategoryMax, fetchQuestions, fetchToken, resetToken } from '../api';
+import { triviaContextReducer } from '../util';
 
 // Initial state
 const initialState = { questionLimit: 10, maximums: [], category: 'any', difficulty: 'any', type: 'any', token: '', questions: [], };
-
-// Reducer function
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'SET_DIFFICULTY':
-      return { ...state, difficulty: action.payload };
-    case 'SET_MAXIMUMS':
-      return { ...state, maximums: action.payload };
-    case 'SET_TOKEN':
-      return { ...state, token: action.payload };
-    case 'SET_CATEGORY':
-      return { ...state, category: action.payload };
-    case 'SET_LIMIT':
-      return { ...state, questionLimit: action.payload };
-    case 'SET_TYPE':
-      return { ...state, type: action.payload };
-    case 'SET_QUESTIONS':
-      return { ...state, questions: action.payload };
-    default:
-      return state;
-  }
-};
 
 // Create context
 const TriviaContext = createContext();
@@ -32,7 +11,7 @@ const TriviaContext = createContext();
 // Provider component
 export const TriviaProvider = ({ children }) => {
   // State
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(triviaContextReducer, initialState);
   const [isTokenLoading, setIsTokenLoading] = useState(true);
   const [isCategoryLoading, setIsCategoryLoading] = useState(true);
   const [isQuestionsLoading, setIsQuestionsLoading] = useState(false);
