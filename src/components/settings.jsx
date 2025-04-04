@@ -43,23 +43,26 @@ const Settings = () => {
   if (isTokenLoading || isCategoryLoading) return <Loader />;
 
   return (
-    <>
-      <h2>Settings</h2>
+    <fieldset>
+      <legend>Settings</legend>
       <CategorySelect categories={categories} />
       {!categoryIsAny &&
         <>
+          <br />
           <br />
           <DifficultySelect />
         </>
       }
       <br />
+      <br />
       <LengthSelect />
+      <br />
       <br />
       <TypeSelect />
       <br />
       <br />
       <button type="button" onClick={handleClick}>Generate Questions</button>
-    </>
+    </fieldset>
   );
 };
 
