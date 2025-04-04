@@ -10,7 +10,7 @@ import TriviaContext from '../context/TriviaContext';
 const Settings = () => {
   // Context
   const {
-    isTokenLoading, isCategoryLoading, setIsCategoryLoading, category, generateQuestions,
+    isTokenLoading, isCategoryLoading, setIsCategoryLoading, category, generateQuestions, isQuestionsLoading,
   } = useContext(TriviaContext);
 
   // Computed Values
@@ -61,7 +61,7 @@ const Settings = () => {
       <TypeSelect />
       <br />
       <br />
-      <button type="button" onClick={handleClick}>Generate Questions</button>
+      <button type="button" onClick={handleClick} disabled={isQuestionsLoading}>Generate Questions</button>
     </fieldset>
   );
 };

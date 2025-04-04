@@ -34,6 +34,7 @@ export const TriviaProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isTokenLoading, setIsTokenLoading] = useState(true);
   const [isCategoryLoading, setIsCategoryLoading] = useState(true);
+  const [isQuestionsLoading, setIsQuestionsLoading] = useState(false);
 
   // Methods
   const resetToken = useCallback(async () => {
@@ -59,6 +60,8 @@ export const TriviaProvider = ({ children }) => {
   });
 
   const generateQuestions = useCallback(async () => {
+    setIsQuestionsLoading(true);
+
     try {
       const { category, difficulty, type, questionLimit: amount, token } = state;
       const params = { category, difficulty, type, amount, token };
@@ -84,7 +87,7 @@ export const TriviaProvider = ({ children }) => {
     } catch (error) {
       console.error(error.message);
     } finally {
-      setIsTokenLoading(false);
+      setIsQuestionsLoading(false);
     }
   });
 
@@ -160,7 +163,7 @@ export const TriviaProvider = ({ children }) => {
   }, []);
 
   return (
-    <TriviaContext.Provider value={{ ...state, isTokenLoading, isCategoryLoading, dispatch, setIsCategoryLoading, generateQuestions }}>
+    <TriviaContext.Provider value={{ ...state, isTokenLoading, isCategoryLoading, dispatch, setIsCategoryLoading, generateQuestions, isQuestionsLoading, }}>
       {children}
     </TriviaContext.Provider>
   );
