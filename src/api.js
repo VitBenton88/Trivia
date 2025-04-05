@@ -1,16 +1,9 @@
-const API_ENDPOINTS = {
-  tokenFetch: 'https://opentdb.com/api_token.php?command=request',
-  tokenReset: 'https://opentdb.com/api_token.php?command=reset',
-  getQuestions: 'https://opentdb.com/api.php',
-  getGlobalCategoryMaximums: 'https://opentdb.com/api_count_global.php',
-  getCategoryMaximums: 'https://opentdb.com/api_count.php',
-  getCategories: 'https://opentdb.com/api_category.php',
-};
+import { API_ENDPOINTS, SESSION_KEYS } from './utils/constants';
 
 export const resetToken = async (token = '') => {
   const fetchEndpoint = `${API_ENDPOINTS.tokenReset}&token=${token}`;
 
-  sessionStorage.setItem('triviaToken', '');
+  sessionStorage.setItem(SESSION_KEYS.sessionTokenKey, '');
 
   const response = await fetch(fetchEndpoint);
   const data = await response.json();
@@ -69,7 +62,7 @@ export const fetchCategoryMax = async (category = '') => {
 };
 
 export const fetchToken = async () => {
-  const tokenFromSession = sessionStorage.getItem('triviaToken');
+  const tokenFromSession = sessionStorage.getItem(SESSION_KEYS.sessionTokenKey);
 
   if (tokenFromSession) return tokenFromSession;
 
@@ -77,7 +70,7 @@ export const fetchToken = async () => {
   const { response_code, token } = await response.json();
 
   if (response_code === 0) {
-    sessionStorage.setItem('triviaToken', token);
+    sessionStorage.setItem(SESSION_KEYS.sessionTokenKey, token);
     return token;
   } else {
     throw new Error('Failed to fetch session token.');
