@@ -1,4 +1,4 @@
-import { useContext, useCallback, useState, useMemo } from 'react';
+import { useContext, useCallback, useState, useMemo, useEffect } from 'react';
 import { combineAndShuffle, decodeHtml } from '../utils/util'
 import Loader from './loader'
 import TriviaContext from '../context/TriviaContext';
@@ -41,6 +41,14 @@ const Questions = () => {
       setSuccessfulAnswers(prevValues => prevValues.filter(answer => answer !== correct_answer))
     }
   });
+
+  const resetProgress = useCallback(() => {
+    setSuccessfulAnswers([]);
+    setQuestionsAnswered([]);
+  });
+
+  // Effects Hooks
+  useEffect(resetProgress, [questions]);
 
   if (isQuestionsLoading) return <Loader />;
   if (!questions?.length) return;
