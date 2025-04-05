@@ -1,6 +1,6 @@
 import { createContext, useReducer, useEffect, useState, useCallback } from 'react';
 import { fetchCategoryMax, fetchQuestions, fetchToken, resetToken } from '../api';
-import { triviaContextReducer } from '../util';
+import { triviaContextReducer } from '../utils/util';
 
 // Initial state
 const initialState = { questionLimit: 10, maximums: [], category: 'any', difficulty: 'any', type: 'any', token: '', questions: [], };
