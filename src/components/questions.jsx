@@ -9,10 +9,8 @@ const Questions = () => {
 
   // Methods
   const handleSelect = useCallback((answer, correct_answer) => {
-    const isCorrect = answer === correct_answer;
-
-    if (isCorrect) {
-
+    if (answer === correct_answer) {
+      console.log('CORRECT!');
     }
   });
 
