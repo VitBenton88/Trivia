@@ -24,3 +24,15 @@ export const triviaContextReducer = (state, action) => {
       return state;
   }
 };
+
+export const combineAndShuffle = (value, array) => {
+  const combined = [...array, value];
+  
+  // Shuffle using Fisher-Yates algorithm
+  for (let i = combined.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [combined[i], combined[j]] = [combined[j], combined[i]];
+  }
+  
+  return combined;
+};
