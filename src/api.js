@@ -9,6 +9,9 @@ const API_ENDPOINTS = {
 
 export const resetToken = async (token = '') => {
   const fetchEndpoint = `${API_ENDPOINTS.tokenReset}&token=${token}`;
+
+  sessionStorage.setItem('triviaToken', '');
+
   const response = await fetch(fetchEndpoint);
   const data = await response.json();
 

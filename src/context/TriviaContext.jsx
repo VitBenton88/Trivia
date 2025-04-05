@@ -20,6 +20,8 @@ export const TriviaProvider = ({ children }) => {
   const clearToken = useCallback(async () => {
     try {
       setIsTokenLoading(true);
+      dispatch({ type: 'SET_TOKEN', payload: '' });
+
       const token = await resetToken(state.token);
       dispatch({ type: 'SET_TOKEN', payload: token });
     } catch (error) {
@@ -37,8 +39,8 @@ export const TriviaProvider = ({ children }) => {
       const tokenErrorCodes = [3, 4];
 
       if (tokenErrorCodes.includes(response_code)) {
-        clearToken();
-        generateQuestions();
+        await clearToken();
+        await generateQuestions();
       } else {
         dispatch({ type: 'SET_QUESTIONS', payload: results });
       }
