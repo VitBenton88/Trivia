@@ -1,5 +1,5 @@
 import { useContext, useCallback, useState, useMemo, useEffect } from 'react';
-import { combineAndShuffle, decodeHtml, patchObjectInArray } from '../utils/util'
+import { combineAndShuffle, decodeHtml } from '../utils/util'
 import Loader from './loader'
 import TriviaContext from '../context/TriviaContext';
 

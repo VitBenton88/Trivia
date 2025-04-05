@@ -36,12 +36,3 @@ export const combineAndShuffle = (value, array) => {
   
   return combined;
 };
-
-export const patchObjectInArray = (array, id, updates) => {
-  return array.map(item => {
-    if (item.id === id) {
-      return { ...item, ...updates };
-    }
-    return item;
-  });
-};
