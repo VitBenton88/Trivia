@@ -1,15 +1,15 @@
 import { API_ENDPOINTS, SESSION_KEYS } from './utils/constants';
 
-export const resetToken = async (token = '') => {
-  const fetchEndpoint = `${API_ENDPOINTS.tokenReset}&token=${token}`;
-
+export const resetToken = async (expiredToken = '') => {
   sessionStorage.setItem(SESSION_KEYS.sessionTokenKey, '');
 
+  const fetchEndpoint = `${API_ENDPOINTS.tokenReset}&token=${expiredToken}`;
   const response = await fetch(fetchEndpoint);
-  const data = await response.json();
+  const { response_code, token } = await response.json();
 
-  if (data.response_code === 0) {
-    return data.token;
+  if (response_code === 0) {
+    sessionStorage.setItem(SESSION_KEYS.sessionTokenKey, token);
+    return token;
   } else {
     throw new Error(`Failed to reset session token. Error code: ${data.response_code}`);
   }
