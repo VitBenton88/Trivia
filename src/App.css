@@ -5,21 +5,6 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
 #questions-list,
 .answers-list {
   list-style: none;
@@ -39,37 +24,18 @@
   border-color: red;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
 .loader {
   border: 24px solid;
   border-color: rgba(255, 255, 255, 0.15) rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.5);
   border-radius: 50%;
   display: inline-block;
   box-sizing: border-box;
-  animation: animloader 1s linear infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .loader {
+    animation: animloader 1s linear infinite;
+  }
 }
 
 @keyframes animloader {
