@@ -24,6 +24,33 @@
   border-color: red;
 }
 
+.tags {
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  margin-top: 2em;
+}
+
+.tag {
+  border-radius: 6px;
+  border: 1px solid whitesmoke;
+  margin: .25em;
+  padding: .33em;
+  user-select: none;
+}
+
+.tag.difficulty.easy {
+  background-color: darkslategray;
+}
+
+.tag.difficulty.medium {
+  background-color: darkslateblue;
+}
+
+.tag.difficulty.hard {
+  background-color: darkred;
+}
+
 .loader {
   border: 24px solid;
   border-color: rgba(255, 255, 255, 0.15) rgba(255, 255, 255, 0.25) rgba(255, 255, 255, 0.35) rgba(255, 255, 255, 0.5);

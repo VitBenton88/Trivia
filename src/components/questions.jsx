@@ -1,5 +1,5 @@
 import { useContext, useCallback, useState, useMemo, useEffect } from 'react';
-import { combineAndShuffle, decodeHtml } from '../utils/util'
+import { capitalize, combineAndShuffle, decodeHtml } from '../utils/util'
 import Loader from './loader'
 import TriviaContext from '../context/TriviaContext';
 
@@ -82,7 +82,7 @@ const Questions = () => {
       <h2>Questions</h2>
       <h3>{summaryText}</h3>
       <ul id="questions-list">
-        {questionsToRender.map(({ answers_to_list, correct_answer, question }, index) => (
+        {questionsToRender.map(({ answers_to_list, correct_answer, question, category, difficulty }, index) => (
           <li key={question} className={getClassName(question)}>
             <hr />
             <h4><span>{`${index + 1}.`}</span> {decodeHtml(question)}</h4>
@@ -102,8 +102,11 @@ const Questions = () => {
                   <label htmlFor={answer}>{decodeHtml(answer)}</label>
                 </div>
               ))}
+              <div className="tags">
+                <p className='tag category'>{category}</p>
+                <p className={`tag difficulty ${difficulty}`}>{capitalize(difficulty)}</p>
+              </div>
             </fieldset>
-
           </li>
         ))}
       </ul>
