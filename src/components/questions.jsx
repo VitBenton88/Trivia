@@ -102,10 +102,12 @@ const Questions = () => {
                   <label htmlFor={answer}>{decodeHtml(answer)}</label>
                 </div>
               ))}
-              <div className="tags">
-                <p className='tag category'>{category}</p>
-                <p className={`tag difficulty ${difficulty}`}>{capitalize(difficulty)}</p>
-              </div>
+              <ul className="tags">
+                <li className='tag category'>{decodeHtml(category)}</li>
+                <li className={`tag difficulty ${difficulty}`}>
+                  {capitalize(difficulty)}
+                </li>
+              </ul>
             </fieldset>
           </li>
         ))}

@@ -5,6 +5,7 @@
   text-align: center;
 }
 
+.tags,
 #questions-list,
 .answers-list {
   list-style: none;
@@ -32,8 +33,9 @@
 }
 
 .tag {
+  display: block;
   border-radius: 6px;
-  border: 1px solid whitesmoke;
+  border: 1px solid whitesmoke !important;
   margin: .25em;
   padding: .33em;
   user-select: none;
