@@ -11,7 +11,7 @@ export const resetToken = async (expiredToken = '') => {
     sessionStorage.setItem(SESSION_KEYS.sessionTokenKey, token);
     return token;
   } else {
-    throw new Error(`Failed to reset session token. Error code: ${data.response_code}`);
+    throw new Error(`Failed to reset session token. Error code: ${response_code}`);
   }
 };
 
@@ -73,7 +73,7 @@ export const fetchToken = async () => {
     sessionStorage.setItem(SESSION_KEYS.sessionTokenKey, token);
     return token;
   } else {
-    throw new Error('Failed to fetch session token.');
+    throw new Error(`Failed to fetch session token. Error code: ${response_code}`);
   }
 };
 
