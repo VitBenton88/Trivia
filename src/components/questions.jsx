@@ -1,5 +1,5 @@
 import { useContext, useCallback, useState, useMemo, useEffect } from 'react';
-import { combineAndShuffle, decodeHtml } from '../utils/util'
+import { combineAndShuffle, decodeHtml, patchObjectInArray } from '../utils/util'
 import Loader from './loader'
 import TriviaContext from '../context/TriviaContext';
 
@@ -8,10 +8,14 @@ const Questions = () => {
   const { questions, isQuestionsLoading } = useContext(TriviaContext);
 
   // State
-  const [successfulAnswers, setSuccessfulAnswers] = useState([]);
   const [questionsAnswered, setQuestionsAnswered] = useState([]);
 
   // Computed Values
+  const successfulAnswers = useMemo(
+    () => questionsAnswered.filter(question => !!question.correctlyAnswered),
+    [questionsAnswered]
+  );
+
   const summaryText = useMemo(
     () => `Correctly answered: ${successfulAnswers.length} out of ${questions.length}`,
     [questions, successfulAnswers]
@@ -36,24 +40,34 @@ const Questions = () => {
   }, [questions]);
 
   // Methods
-  const getClassName = useCallback((correct_answer, question) => {
-    if (!questionsAnswered.includes(question)) return '';
+  const getClassName = useCallback((question) => {
+    const questionAnswered = questionsAnswered.find(({ question: questionText }) => question === questionText);
 
-    return successfulAnswers.includes(correct_answer) ? 'correct' : 'incorrect';
-  });
+    if (!questionAnswered) return '';
+
+    return questionAnswered.correctlyAnswered ? 'correct' : 'incorrect';
+  }, [questionsAnswered, successfulAnswers]);
 
   const handleSelect = useCallback((answer, correct_answer, question) => {
-    setQuestionsAnswered(prevValues => [...prevValues, question])
+    const correctlyAnswered = answer === correct_answer;
 
-    if (answer === correct_answer) {
-      setSuccessfulAnswers(prevValues => [...prevValues, correct_answer])
-    } else {
-      setSuccessfulAnswers(prevValues => prevValues.filter(answer => answer !== correct_answer))
-    }
+    setQuestionsAnswered((prevItems) => {
+      // Check if the object already exists based on the `id` property
+      const existingIndex = prevItems.findIndex(({ question: questionText }) => question === questionText);
+      if (existingIndex !== -1) {
+        const updatedItems = [...prevItems];
+        updatedItems[existingIndex] = {
+          ...updatedItems[existingIndex],
+          correctlyAnswered,
+        };
+        return updatedItems;
+      }
+
+      return [...prevItems, { question, correctlyAnswered }];
+    });
   });
 
   const resetProgress = useCallback(() => {
-    setSuccessfulAnswers([]);
     setQuestionsAnswered([]);
   });
 
@@ -69,7 +83,7 @@ const Questions = () => {
       <h3>{summaryText}</h3>
       <ul id="questions-list">
         {questionsToRender.map(({ answers_to_list, correct_answer, question }) => (
-          <li key={question} className={getClassName(correct_answer, question)}>
+          <li key={question} className={getClassName(question)}>
             <h4>{decodeHtml(question)}</h4>
 
             <fieldset>
