@@ -37,3 +37,5 @@ export const RESPONSE_CODES = {
     message: 'Too many requests have occurred. Each IP can only access the API once every 5 seconds.'
   }
 }
+
+export const TOKEN_ERROR_CODES = [3, 4];
