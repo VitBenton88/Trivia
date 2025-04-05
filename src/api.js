@@ -1,4 +1,4 @@
-import { API_ENDPOINTS, SESSION_KEYS } from './utils/constants';
+import { API_ENDPOINTS, RESPONSE_CODES, SESSION_KEYS } from './utils/constants';
 
 export const resetToken = async (expiredToken = '') => {
   sessionStorage.setItem(SESSION_KEYS.sessionTokenKey, '');
@@ -11,7 +11,7 @@ export const resetToken = async (expiredToken = '') => {
     sessionStorage.setItem(SESSION_KEYS.sessionTokenKey, token);
     return token;
   } else {
-    throw new Error(`Failed to reset session token. Error code: ${response_code}`);
+    throw new Error(`Failed to reset session token. ${RESPONSE_CODES[response_code].label}`, {cause: RESPONSE_CODES[response_code].message});
   }
 };
 
@@ -73,7 +73,7 @@ export const fetchToken = async () => {
     sessionStorage.setItem(SESSION_KEYS.sessionTokenKey, token);
     return token;
   } else {
-    throw new Error(`Failed to fetch session token. Error code: ${response_code}`);
+    throw new Error(`Failed to fetch session token. ${RESPONSE_CODES[response_code].label}`, {cause: RESPONSE_CODES[response_code].message});
   }
 };
 
