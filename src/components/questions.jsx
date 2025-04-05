@@ -16,9 +16,14 @@ const Questions = () => {
     const questionsCollection = [];
 
     questions.forEach(question => {
+      const { correct_answer, incorrect_answers, type } = question;
+      const answers_to_list = type === 'multiple'
+        ? combineAndShuffle(correct_answer, incorrect_answers).sort()
+        : [correct_answer, incorrect_answers].sort().reverse(); // bool type should list in 'true, false' order
+
       questionsCollection.push({
         ...question,
-        answers_to_list: combineAndShuffle(question.correct_answer, question.incorrect_answers),
+        answers_to_list,
       })
     });
 
