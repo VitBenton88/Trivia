@@ -12,6 +12,11 @@ const Questions = () => {
   const [questionsAnswered, setQuestionsAnswered] = useState([]);
 
   // Computed Values
+  const summaryText = useMemo(
+    () => `Correctly answered: ${successfulAnswers.length} out of ${questions.length}`,
+    [questions, successfulAnswers]
+  );
+
   const questionsToRender = useMemo(() => {
     const questionsCollection = [];
 
@@ -61,7 +66,7 @@ const Questions = () => {
   return (
     <>
       <h2>Questions</h2>
-      <h3>{`Correctly answered: ${successfulAnswers.length} out of ${questions.length}`}</h3>
+      <h3>{summaryText}</h3>
       <ul id="questions-list">
         {questionsToRender.map(({ answers_to_list, correct_answer, question }) => (
           <li key={question} className={getClassName(correct_answer, question)}>
