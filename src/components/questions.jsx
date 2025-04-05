@@ -25,7 +25,7 @@ const Questions = () => {
   return (
     <>
       <h2>Questions</h2>
-      <h3>{`Correct answers: ${successfulAnswers.length} out of ${questions.length}`}</h3>
+      <h3>{`Correctly answered: ${successfulAnswers.length} out of ${questions.length}`}</h3>
       <ul id="questions-list">
         {questions.map(({ correct_answer, incorrect_answers, question }) => (
           <li key={question}>
