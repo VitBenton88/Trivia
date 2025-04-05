@@ -1,4 +1,4 @@
-import { useContext, useCallback } from 'react';
+import { useContext, useCallback, useState } from 'react';
 import { decodeHtml } from '../utils/util'
 import Loader from './loader'
 import TriviaContext from '../context/TriviaContext';
@@ -7,10 +7,15 @@ const Questions = () => {
   // Context
   const { questions, isQuestionsLoading } = useContext(TriviaContext);
 
+  // State
+  const [successfulAnswers, setSuccessfulAnswers] = useState([]);
+
   // Methods
   const handleSelect = useCallback((answer, correct_answer) => {
     if (answer === correct_answer) {
-      console.log('CORRECT!');
+      setSuccessfulAnswers(prevValues => [...prevValues, correct_answer])
+    } else {
+      setSuccessfulAnswers(prevValues => prevValues.filter(answer => answer !== correct_answer))
     }
   });
 
@@ -20,10 +25,11 @@ const Questions = () => {
   return (
     <>
       <h2>Questions</h2>
+      <h3>{`Correct answers: ${successfulAnswers.length} out of ${questions.length}`}</h3>
       <ul id="questions-list">
         {questions.map(({ correct_answer, incorrect_answers, question }) => (
           <li key={question}>
-            <h3>{decodeHtml(question)}</h3>
+            <h4>{decodeHtml(question)}</h4>
 
             <fieldset>
               <legend>Possible Answers:</legend>
