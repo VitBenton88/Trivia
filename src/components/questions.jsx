@@ -82,9 +82,10 @@ const Questions = () => {
       <h2>Questions</h2>
       <h3>{summaryText}</h3>
       <ul id="questions-list">
-        {questionsToRender.map(({ answers_to_list, correct_answer, question }) => (
+        {questionsToRender.map(({ answers_to_list, correct_answer, question }, index) => (
           <li key={question} className={getClassName(question)}>
-            <h4>{decodeHtml(question)}</h4>
+            <hr />
+            <h4><span>{`${index + 1}.`}</span> {decodeHtml(question)}</h4>
 
             <fieldset>
               <legend>Possible Answers:</legend>
