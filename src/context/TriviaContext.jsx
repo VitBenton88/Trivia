@@ -17,10 +17,11 @@ export const TriviaProvider = ({ children }) => {
   const [isQuestionsLoading, setIsQuestionsLoading] = useState(false);
 
   // Methods
-  const clearToken = useCallback(() => {
+  const clearToken = useCallback(async () => {
     try {
       setIsTokenLoading(true);
-      resetToken(state.token);
+      const token = await resetToken(state.token);
+      dispatch({ type: 'SET_TOKEN', payload: token });
     } catch (error) {
       console.error(error.message);
     } finally {
