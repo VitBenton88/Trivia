@@ -2,6 +2,8 @@ import { createContext, useReducer, useEffect, useState, useCallback } from 'rea
 import { fetchCategoryMax, fetchQuestions, fetchToken, resetToken } from '../api';
 import { triviaContextReducer } from '../utils/util';
 
+const tokenErrorCodes = [3, 4];
+
 // Initial state
 const initialState = { questionLimit: 10, maximums: [], category: 'any', difficulty: 'any', type: 'any', token: '', questions: [], };
 
@@ -36,7 +38,6 @@ export const TriviaProvider = ({ children }) => {
 
     try {
       const { response_code, results } = await fetchQuestions(state);
-      const tokenErrorCodes = [3, 4];
 
       if (tokenErrorCodes.includes(response_code)) {
         await clearToken();
