@@ -71,9 +71,8 @@ const Questions = () => {
     setQuestionsAnswered([]);
   });
 
-  const isAnswered = useCallback(
-    question =>
-      questionsAnswered.some(item => item.question === question),
+  const isAnswered = useCallback(question =>
+    questionsAnswered.some(item => item.question === question),
     [questionsAnswered]
   );
 
@@ -97,7 +96,7 @@ const Questions = () => {
               <legend>Possible Answers:</legend>
 
               {answers_to_list.map(answer => (
-                <div key={answer}>
+                <div key={answer} className="question-input">
                   <input
                     type="radio"
                     id={answer}

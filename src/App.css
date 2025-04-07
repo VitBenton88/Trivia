@@ -25,6 +25,14 @@
   border-color: red;
 }
 
+.question-input {
+  padding: .5em .25em;
+}
+
+.question-input label {
+  height: 100%;
+}
+
 .tags {
   display: flex;
   align-items: center;
