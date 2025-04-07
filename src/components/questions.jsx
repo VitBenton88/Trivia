@@ -63,13 +63,19 @@ const Questions = () => {
         return updatedItems;
       }
 
-      return [...prevItems, { question, correctlyAnswered }];
+      return [...prevItems, { question, correctlyAnswered }]; 1
     });
   });
 
   const resetProgress = useCallback(() => {
     setQuestionsAnswered([]);
   });
+
+  const isAnswered = useCallback(
+    question =>
+      questionsAnswered.some(item => item.question === question),
+    [questionsAnswered]
+  );
 
   // Effects Hooks
   useEffect(resetProgress, [questions]);
@@ -96,6 +102,7 @@ const Questions = () => {
                     type="radio"
                     id={answer}
                     name={`${question}-answer`}
+                    disabled={isAnswered(question)}
                     value={answer}
                     onChange={event => handleSelect(event.target.value, correct_answer, question)}
                   />
