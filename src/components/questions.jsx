@@ -90,13 +90,11 @@ const Questions = () => {
     <>
       <h2>Questions</h2>
       <h3>{summaryText}</h3>
-      <ul id="questions-list">
+      <ol id="questions-list">
         {questionsToRender.map(({ answers_to_list, correct_answer, question, category, difficulty }, index) => (
           <li key={question} className={getQuestionClassName(question)}>
             <hr />
-            <h4>
-              <span>{`${index + 1}.`}</span> {decodeHtml(question)}
-            </h4>
+            <h4>{decodeHtml(question)}</h4>
 
             <fieldset>
               <legend>Possible Answers:</legend>
@@ -124,7 +122,7 @@ const Questions = () => {
             </fieldset>
           </li>
         ))}
-      </ul>
+      </ol>
     </>
   );
 };
