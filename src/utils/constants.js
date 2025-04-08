@@ -11,7 +11,7 @@ export const DIFFICULTY_TYPES = {
   any: 'any',
   easy: 'easy',
   medium: 'medium',
-  medium: 'hard',
+  hard: 'hard',
 };
 
 export const SESSION_KEYS = {
