@@ -11,17 +11,7 @@
 }
 
 #questions-list li {
-  border: 5px solid transparent;
-  box-sizing: border-box;
   margin-top: 1em;
-}
-
-#questions-list li.correct {
-  border-color: darkseagreen;
-}
-
-#questions-list li.incorrect {
-  border-color: red;
 }
 
 .answer-input {
