@@ -25,12 +25,29 @@
   border-color: red;
 }
 
-.question-input {
+.answer-input {
   padding: .5em .25em;
 }
 
-.question-input label {
+.answer-input label {
   height: 100%;
+}
+
+.answer-input.answered.correct-answer {
+  border: 1px dotted darkseagreen;
+}
+
+.answer-input.answered.correct-answer::after {
+  content: 'Correct Answer';
+  display: block;
+  color: darkseagreen;
+}
+
+.answer-input.answered.selected.incorrect-answer::after {
+  content: '⛔';
+  display: inline-block;
+  color: darkseagreen;
+  margin-left: 5px;
 }
 
 .tags {

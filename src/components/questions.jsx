@@ -12,7 +12,7 @@ const Questions = () => {
 
   // Computed Values
   const successfulAnswers = useMemo(
-    () => questionsAnswered.filter(question => !!question.correctlyAnswered),
+    () => questionsAnswered.filter(question => !!question.correctly_answered),
     [questionsAnswered]
   );
 
@@ -40,31 +40,18 @@ const Questions = () => {
   }, [questions]);
 
   // Methods
-  const getClassName = useCallback((question) => {
+  const getQuestionClassName = useCallback((question) => {
     const questionAnswered = questionsAnswered.find(({ question: questionText }) => question === questionText);
 
     if (!questionAnswered) return '';
 
-    return questionAnswered.correctlyAnswered ? 'correct' : 'incorrect';
+    return questionAnswered.correctly_answered ? 'correct' : 'incorrect';
   }, [questionsAnswered, successfulAnswers]);
 
   const handleSelect = useCallback((answer, correct_answer, question) => {
-    const correctlyAnswered = answer === correct_answer;
+    const correctly_answered = answer === correct_answer;
 
-    setQuestionsAnswered((prevItems) => {
-      // Check if the object already exists based on the `id` property
-      const existingIndex = prevItems.findIndex(({ question: questionText }) => question === questionText);
-      if (existingIndex !== -1) {
-        const updatedItems = [...prevItems];
-        updatedItems[existingIndex] = {
-          ...updatedItems[existingIndex],
-          correctlyAnswered,
-        };
-        return updatedItems;
-      }
-
-      return [...prevItems, { question, correctlyAnswered }]; 1
-    });
+    setQuestionsAnswered((prevItems) => [...prevItems, { question, correctly_answered, selected: answer }]);
   });
 
   const resetProgress = useCallback(() => {
@@ -74,6 +61,23 @@ const Questions = () => {
   const isAnswered = useCallback(question =>
     questionsAnswered.some(item => item.question === question),
     [questionsAnswered]
+  );
+
+  const getAnswerClassName = useCallback((question, answer) => {
+    if (isAnswered(question)) {
+      const { correctly_answered, selected } = questionsAnswered.find(item => item.question === question);
+      const { correct_answer } = questions.find(item => item.question === question);
+
+      const isCorrectAnswerClass = answer === correct_answer ? 'correct-answer' : 'incorrect-answer';
+      const isAnsweredIncorrectlyClass = correctly_answered ? '' : 'incorrectly-answered';
+      const isSelectedAnswerClass = selected === answer ? 'selected' : '';
+
+      return ['answered', isSelectedAnswerClass, isCorrectAnswerClass, isAnsweredIncorrectlyClass].join(' ');
+    }
+
+    return ''
+  },
+    [questionsAnswered, questions, isAnswered]
   );
 
   // Effects Hooks
@@ -88,15 +92,17 @@ const Questions = () => {
       <h3>{summaryText}</h3>
       <ul id="questions-list">
         {questionsToRender.map(({ answers_to_list, correct_answer, question, category, difficulty }, index) => (
-          <li key={question} className={getClassName(question)}>
+          <li key={question} className={getQuestionClassName(question)}>
             <hr />
-            <h4><span>{`${index + 1}.`}</span> {decodeHtml(question)}</h4>
+            <h4>
+              <span>{`${index + 1}.`}</span> {decodeHtml(question)}
+            </h4>
 
             <fieldset>
               <legend>Possible Answers:</legend>
 
               {answers_to_list.map(answer => (
-                <div key={answer} className="question-input">
+                <div key={answer} className={`answer-input ${getAnswerClassName(question, answer)}`}>
                   <input
                     type="radio"
                     id={answer}
@@ -108,6 +114,7 @@ const Questions = () => {
                   <label htmlFor={answer}>{decodeHtml(answer)}</label>
                 </div>
               ))}
+
               <ul className="tags">
                 <li className='tag category'>{decodeHtml(category)}</li>
                 <li className={`tag difficulty ${difficulty}`}>
