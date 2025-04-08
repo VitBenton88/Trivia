@@ -1,10 +1,10 @@
 import { createContext, useReducer, useEffect, useState, useCallback } from 'react';
 import { fetchCategoryMax, fetchQuestions, fetchToken, resetToken } from '../api';
 import { triviaContextReducer } from '../utils/util';
-import { TOKEN_ERROR_CODES } from '../utils/constants'
+import { DIFFICULTY_TYPES, TOKEN_ERROR_CODES } from '../utils/constants'
 
 // Initial state
-const initialState = { questionLimit: 10, maximums: [], category: 'any', difficulty: 'any', type: 'any', token: '', questions: [], };
+const initialState = { questionLimit: 10, maximums: [], category: 'any', difficulty: DIFFICULTY_TYPES.any, type: 'any', token: '', questions: [], };
 
 // Create context
 const TriviaContext = createContext();

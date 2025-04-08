@@ -1,4 +1,4 @@
-import { API_ENDPOINTS, RESPONSE_CODES, SESSION_KEYS } from './utils/constants';
+import { API_ENDPOINTS, RESPONSE_CODES, SESSION_KEYS, DIFFICULTY_TYPES } from './utils/constants';
 
 export const resetToken = async (expiredToken = '') => {
   sessionStorage.setItem(SESSION_KEYS.sessionTokenKey, '');
@@ -40,22 +40,22 @@ export const fetchCategoryMax = async (category = '') => {
   const data = await response.json();
 
   return isAnyCategory ? [
-    { difficulty: 'any', max: data.overall.total_num_of_verified_questions }
+    { difficulty: DIFFICULTY_TYPES.any, max: data.overall.total_num_of_verified_questions }
   ] : [
     {
-      difficulty: 'any',
+      difficulty: DIFFICULTY_TYPES.any,
       max: data.category_question_count.total_question_count,
     },
     {
-      difficulty: 'easy',
+      difficulty: DIFFICULTY_TYPES.easy,
       max: data.category_question_count.total_easy_question_count,
     },
     {
-      difficulty: 'medium',
+      difficulty: DIFFICULTY_TYPES.medium,
       max: data.category_question_count.total_medium_question_count,
     },
     {
-      difficulty: 'hard',
+      difficulty: DIFFICULTY_TYPES.hard,
       max: data.category_question_count.total_hard_question_count,
     },
   ];

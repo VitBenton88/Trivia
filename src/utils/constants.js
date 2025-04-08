@@ -7,6 +7,13 @@ export const API_ENDPOINTS = {
   getCategories: 'https://opentdb.com/api_category.php',
 };
 
+export const DIFFICULTY_TYPES = {
+  any: 'any',
+  easy: 'easy',
+  medium: 'medium',
+  medium: 'hard',
+};
+
 export const SESSION_KEYS = {
   sessionTokenKey: 'triviaToken',
 };
