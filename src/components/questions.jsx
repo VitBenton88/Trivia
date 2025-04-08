@@ -46,7 +46,7 @@ const Questions = () => {
     if (!questionAnswered) return '';
 
     return questionAnswered.correctly_answered ? 'correct' : 'incorrect';
-  }, [questionsAnswered, successfulAnswers]);
+  }, [questionsAnswered]);
 
   const handleSelect = useCallback((answer, correct_answer, question) => {
     const correctly_answered = answer === correct_answer;
