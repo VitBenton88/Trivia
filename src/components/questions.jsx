@@ -17,8 +17,7 @@ const Questions = () => {
   );
 
   const summaryText = useMemo(
-    () => `Correctly answered: ${successfulAnswers.length} out of ${questions.length}`,
-    [questions, successfulAnswers]
+    () => `Correctly answered: ${successfulAnswers.length} out of ${questions.length}`, [questions, successfulAnswers]
   );
 
   const questionsToRender = useMemo(() => {
@@ -28,7 +27,7 @@ const Questions = () => {
       const { correct_answer, incorrect_answers, type } = question;
       const answers_to_list = type === 'multiple'
         ? combineAndShuffle(correct_answer, incorrect_answers).sort()
-        : [correct_answer, incorrect_answers].sort().reverse(); // bool type should list in 'true, false' order
+        : [correct_answer, ...incorrect_answers].sort().reverse(); // bool type should list in 'true, false' order
 
       questionsCollection.push({
         ...question,
@@ -72,7 +71,12 @@ const Questions = () => {
       const isAnsweredIncorrectlyClass = correctly_answered ? '' : 'incorrectly-answered';
       const isSelectedAnswerClass = selected === answer ? 'selected' : '';
 
-      return ['answered', isSelectedAnswerClass, isCorrectAnswerClass, isAnsweredIncorrectlyClass].join(' ');
+      return [
+        'answered',
+        isSelectedAnswerClass,
+        isCorrectAnswerClass,
+        isAnsweredIncorrectlyClass
+      ].join(' ');
     }
 
     return ''
