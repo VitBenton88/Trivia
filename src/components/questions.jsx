@@ -10,34 +10,6 @@ const Questions = () => {
   // State
   const [questionsAnswered, setQuestionsAnswered] = useState([]);
 
-  // Computed Values
-  const successfulAnswers = useMemo(
-    () => questionsAnswered.filter(question => !!question.correctly_answered),
-    [questionsAnswered]
-  );
-
-  const summaryText = useMemo(
-    () => `Correctly answered: ${successfulAnswers.length} out of ${questions.length}`, [questions, successfulAnswers]
-  );
-
-  const questionsToRender = useMemo(() => {
-    const questionsCollection = [];
-
-    questions.forEach(question => {
-      const { correct_answer, incorrect_answers, type } = question;
-      const answers_to_list = type === 'multiple'
-        ? combineAndShuffle(correct_answer, incorrect_answers).sort()
-        : [correct_answer, ...incorrect_answers].sort().reverse(); // bool type should list in 'true, false' order
-
-      questionsCollection.push({
-        ...question,
-        answers_to_list,
-      })
-    });
-
-    return questionsCollection;
-  }, [questions]);
-
   // Methods
   const getQuestionClassName = useCallback((question) => {
     const questionAnswered = questionsAnswered.find(({ question: questionText }) => question === questionText);
@@ -51,10 +23,6 @@ const Questions = () => {
     const correctly_answered = answer === correct_answer;
 
     setQuestionsAnswered((prevItems) => [...prevItems, { question, correctly_answered, selected: answer }]);
-  });
-
-  const resetProgress = useCallback(() => {
-    setQuestionsAnswered([]);
   });
 
   const isAnswered = useCallback(question =>
@@ -84,8 +52,72 @@ const Questions = () => {
     [questionsAnswered, questions, isAnswered]
   );
 
+  // Computed Values
+  const successfulAnswers = useMemo(
+    () => questionsAnswered.filter(question => !!question.correctly_answered),
+    [questionsAnswered]
+  );
+
+  const summaryText = useMemo(
+    () => `Correctly answered: ${successfulAnswers.length} out of ${questions.length}`, [questions, successfulAnswers]
+  );
+
+  const questionsToRender = useMemo(() => {
+    const questionsCollection = [];
+
+    questions.forEach(question => {
+      const { correct_answer, incorrect_answers, type } = question;
+      const answers_to_list = type === 'multiple'
+        ? combineAndShuffle(correct_answer, incorrect_answers).sort()
+        : [correct_answer, ...incorrect_answers].sort().reverse(); // bool type should list in 'true, false' order
+
+      questionsCollection.push({
+        ...question,
+        answers_to_list,
+      })
+    });
+
+    return questionsCollection;
+  }, [questions]);
+
+  const questionsMapped = useMemo(() => {
+    return questionsToRender.map(({ answers_to_list, correct_answer, question, category, difficulty }, index) => (
+      <li key={question} className={getQuestionClassName(question)}>
+        <hr />
+        <h4>{decodeHtml(question)}</h4>
+
+        <fieldset>
+          <legend>Possible Answers:</legend>
+
+          {answers_to_list.map(answer => (
+            <div key={answer} className={`answer-input ${getAnswerClassName(question, answer)}`}>
+              <input
+                type="radio"
+                id={answer}
+                name={`${question}-answer`}
+                disabled={isAnswered(question)}
+                value={answer}
+                onChange={event => handleSelect(event.target.value, correct_answer, question)}
+              />
+              <label htmlFor={answer}>{decodeHtml(answer)}</label>
+            </div>
+          ))}
+
+          <ul className="tags">
+            <li className='tag category'>{decodeHtml(category)}</li>
+            <li className={`tag difficulty ${difficulty}`}>
+              {capitalize(difficulty)}
+            </li>
+          </ul>
+        </fieldset>
+      </li>
+    ))
+  }, [questions]);
+
   // Effects Hooks
-  useEffect(resetProgress, [questions]);
+  useEffect(() => {
+    setQuestionsAnswered([]);
+  }, [questions]);
 
   if (isQuestionsLoading) return <Loader />;
   if (!questions?.length) return;
@@ -95,37 +127,7 @@ const Questions = () => {
       <h2>Questions</h2>
       <h3>{summaryText}</h3>
       <ol id="questions-list">
-        {questionsToRender.map(({ answers_to_list, correct_answer, question, category, difficulty }, index) => (
-          <li key={question} className={getQuestionClassName(question)}>
-            <hr />
-            <h4>{decodeHtml(question)}</h4>
-
-            <fieldset>
-              <legend>Possible Answers:</legend>
-
-              {answers_to_list.map(answer => (
-                <div key={answer} className={`answer-input ${getAnswerClassName(question, answer)}`}>
-                  <input
-                    type="radio"
-                    id={answer}
-                    name={`${question}-answer`}
-                    disabled={isAnswered(question)}
-                    value={answer}
-                    onChange={event => handleSelect(event.target.value, correct_answer, question)}
-                  />
-                  <label htmlFor={answer}>{decodeHtml(answer)}</label>
-                </div>
-              ))}
-
-              <ul className="tags">
-                <li className='tag category'>{decodeHtml(category)}</li>
-                <li className={`tag difficulty ${difficulty}`}>
-                  {capitalize(difficulty)}
-                </li>
-              </ul>
-            </fieldset>
-          </li>
-        ))}
+        {questionsMapped}
       </ol>
     </>
   );
