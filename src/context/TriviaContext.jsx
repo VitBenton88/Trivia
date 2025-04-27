@@ -54,6 +54,7 @@ export const TriviaProvider = ({ children }) => {
 
   // Effects Hooks
   useEffect(() => {
+    const controller = new AbortController();
     const getMaximums = async () => {
       try {
         const maximums = await fetchCategoryMax(state.category);
@@ -64,9 +65,14 @@ export const TriviaProvider = ({ children }) => {
     };
 
     getMaximums();
+
+    return () => {
+      controller.abort();
+    };
   }, [state.category]);
 
   useEffect(() => {
+    const controller = new AbortController();
     const getToken = async () => {
       try {
         const token = await fetchToken();
@@ -79,6 +85,10 @@ export const TriviaProvider = ({ children }) => {
     };
 
     getToken();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   return (
