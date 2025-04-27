@@ -11,7 +11,7 @@ import TriviaContext from '../context/TriviaContext';
 const Settings = () => {
   // Context
   const {
-    isTokenLoading, isCategoryLoading, setIsCategoryLoading, category, generateQuestions, isQuestionsLoading,
+    isTokenLoading, isCategoryLoading, setIsCategoryLoading, setIsQuestionsLoading, category, generateQuestions, isQuestionsLoading,
   } = useContext(TriviaContext);
 
   // Computed Values
@@ -21,18 +21,19 @@ const Settings = () => {
   const [categories, setCategories] = useState([]);
 
   // Methods
-  const handleClick = useCallback(() => generateQuestions());
+  const handleClick = useCallback(() => setIsQuestionsLoading(true));
 
   // Effects Hooks
   useEffect(() => {
     let timeoutId = undefined;
+    const controller = new AbortController();
 
     const getCategories = async () => {
       await new Promise(resolve => {
         timeoutId = setTimeout(resolve, 1000);
       });
       try {
-        const { trivia_categories } = await fetchCategories();
+        const { trivia_categories } = await fetchCategories(controller.signal);
         setCategories(prev => [...prev, ...trivia_categories]);
       } catch (error) {
         console.error(error.message);
@@ -44,9 +45,19 @@ const Settings = () => {
     getCategories();
 
     return () => {
+      controller.abort();
       clearTimeout(timeoutId);
     };
   }, []);
+
+  useEffect(() => {
+    if (!isQuestionsLoading) return;
+
+    const controller = new AbortController();
+    generateQuestions(controller.signal)
+
+    return () => controller.abort();
+  }, [isQuestionsLoading]);
 
   if (isTokenLoading || isCategoryLoading) return <Loader />;
 

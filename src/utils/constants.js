@@ -45,4 +45,5 @@ export const RESPONSE_CODES = {
   }
 }
 
+export const LIMIT_ERROR_CODES = [5];
 export const TOKEN_ERROR_CODES = [3, 4];

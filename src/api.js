@@ -15,7 +15,7 @@ export const resetToken = async (expiredToken = '') => {
   }
 };
 
-export const fetchQuestions = async (state = {}) => {
+export const fetchQuestions = async (state = {}, signal = undefined) => {
   const { category, difficulty, type, questionLimit: amount, token } = state;
   const params = { category, difficulty, type, amount, token };
 
@@ -27,16 +27,16 @@ export const fetchQuestions = async (state = {}) => {
     }
   });
 
-  const response = await fetch(fetchEndpoint.toString());
+  const response = await fetch(fetchEndpoint.toString(), { signal });
   return await response.json();
 };
 
-export const fetchCategoryMax = async (category = '') => {
+export const fetchCategoryMax = async (category = '', signal = undefined) => {
   const isAnyCategory = category === 'any';
   const fetchEndpoint = isAnyCategory ?
     API_ENDPOINTS.getGlobalCategoryMaximums :
     `${API_ENDPOINTS.getCategoryMaximums}?category=${category}`;
-  const response = await fetch(fetchEndpoint);
+  const response = await fetch(fetchEndpoint, { signal });
   const data = await response.json();
 
   return isAnyCategory ? [
@@ -61,12 +61,12 @@ export const fetchCategoryMax = async (category = '') => {
   ];
 };
 
-export const fetchToken = async () => {
+export const fetchToken = async (signal = undefined) => {
   const tokenFromSession = sessionStorage.getItem(SESSION_KEYS.sessionTokenKey);
 
   if (tokenFromSession) return tokenFromSession;
 
-  const response = await fetch(API_ENDPOINTS.tokenFetch);
+  const response = await fetch(API_ENDPOINTS.tokenFetch, { signal });
   const { response_code, token } = await response.json();
 
   if (response_code === 0) {
@@ -77,7 +77,7 @@ export const fetchToken = async () => {
   }
 };
 
-export const fetchCategories = async () => {
-  const response = await fetch(API_ENDPOINTS.getCategories);
+export const fetchCategories = async (signal = undefined) => {
+  const response = await fetch(API_ENDPOINTS.getCategories, { signal });
   return await response.json();
 };
