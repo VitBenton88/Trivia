@@ -7,7 +7,7 @@ const ErrorMessage = () => {
 
   return (
     <>
-      {errorMessage && <p>⚠️ {errorMessage} ⚠️</p>}
+      {!!errorMessage && <p>⚠️ {errorMessage} ⚠️</p>}
     </>
   );
 };
