@@ -25,11 +25,15 @@ const Settings = () => {
 
   // Effects Hooks
   useEffect(() => {
+    let timeoutId = undefined;
+
     const getCategories = async () => {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => {
+        timeoutId = setTimeout(resolve, 1000);
+      });
       try {
         const { trivia_categories } = await fetchCategories();
-        setCategories([...categories, ...trivia_categories]);
+        setCategories(prev => [...prev, ...trivia_categories]);
       } catch (error) {
         console.error(error.message);
       } finally {
@@ -38,6 +42,10 @@ const Settings = () => {
     };
 
     getCategories();
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   if (isTokenLoading || isCategoryLoading) return <Loader />;
