@@ -120,7 +120,7 @@ const Questions = () => {
   }, [questions]);
 
   if (isQuestionsLoading) return <Loader />;
-  if (!questions?.length) return;
+  if (!questions?.length) return null;
 
   return (
     <>
