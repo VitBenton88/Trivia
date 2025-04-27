@@ -34,7 +34,7 @@ const Settings = () => {
       });
       try {
         const { trivia_categories } = await fetchCategories(controller.signal);
-        setCategories(prev => [...prev, ...trivia_categories]);
+        setCategories(trivia_categories);
       } catch (error) {
         console.error(error.message);
       } finally {
