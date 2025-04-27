@@ -112,7 +112,7 @@ const Questions = () => {
         </fieldset>
       </li>
     ))
-  }, [questions]);
+  }, [questionsAnswered, questionsToRender]);
 
   // Effects Hooks
   useEffect(() => {
